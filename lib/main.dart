@@ -6,7 +6,7 @@ main() => runApp(MaterialApp(
       routes: {
         '/': (context) => Temel(),
         '/ikinci': (context) => IkinciSayfa(),
-        '/ucuncu': (context) => UcuncuSayfa()
+        UcuncuSayfa.rotaIsim: (context) => UcuncuSayfa()
       },
     ));
 
@@ -33,7 +33,8 @@ class _TemelState extends State<Temel> {
             ),
             RaisedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/ucuncu');
+                Navigator.pushNamed(context, UcuncuSayfa.rotaIsim,
+                    arguments: Arguman("Argumanlı Sayfa", "Argumanlı İçerik"));
               },
               child: Text("Üçüncü sayfaya geç"),
             ),
@@ -64,11 +65,13 @@ class IkinciSayfa extends StatelessWidget {
 }
 
 class UcuncuSayfa extends StatelessWidget {
+  static const rotaIsim = '/degisken';
   @override
   Widget build(BuildContext context) {
+    final Arguman args = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Üçüncü sayfa"),
+        title: Text(args.baslik),
       ),
       body: Center(
         child: RaisedButton.icon(
@@ -76,8 +79,14 @@ class UcuncuSayfa extends StatelessWidget {
               Navigator.pop(context);
             },
             icon: Icon(Icons.backspace),
-            label: Text("Geri")),
+            label: Text(args.icerik)),
       ),
     );
   }
+}
+
+class Arguman {
+  final String baslik;
+  final String icerik;
+  Arguman(this.baslik, this.icerik);
 }
